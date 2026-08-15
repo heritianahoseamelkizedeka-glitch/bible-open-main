@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Bible Open rassemble des outils simples pour découvrir, comprendre et vivre la Bible." />
+    <meta name="theme-color" content="#f8f3ea" />
+    <link rel="icon" href="/assets/bible-open-logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title>Bible Open — La Bible, ouverte à tous</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#accueil" aria-label="Bible Open, accueil">
+        <img src="/assets/bible-open-logo.svg" alt="" width="44" height="44" />
+        <span>Bible <strong>Open</strong></span>
+      </a>
+      <a class="header-link" href="#applications">Nos applications <span aria-hidden="true">↓</span></a>
+    </header>
+
+    <main id="accueil">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> Une bibliothèque qui grandit avec vous</p>
+          <h1 id="hero-title">La Bible,<br /><em>ouverte à tous.</em></h1>
+          <p class="intro">Explorez les Écritures, approfondissez votre foi et testez vos connaissances grâce à des outils accessibles, pensés pour chaque jour.</p>
+          <a class="primary-button" href="#applications">Découvrir les applications <span aria-hidden="true">↘</span></a>
+        </div>
+
+        <blockquote class="verse-card">
+          <div class="verse-mark" aria-hidden="true">“</div>
+          <p>Ta parole est une lampe à mes pieds, et une lumière sur mon sentier.</p>
+          <footer><span></span> Psaume 119:105</footer>
+        </blockquote>
+      </section>
+
+      <section class="apps-section" id="applications" aria-labelledby="apps-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow"><span></span> L'écosystème Bible Open</p>
+            <h2 id="apps-title">Un même élan,<br />deux façons d’avancer.</h2>
+          </div>
+          <p>Choisissez votre chemin : apprendre en jouant ou prendre le temps d’étudier.</p>
+        </div>
+
+        <div class="app-grid">
+          <a class="app-card quiz-card" href="https://github.com/heritianahoseamelkizedeka-glitch/APK-Quizz-Biblique-BO-v2" target="_blank" rel="noreferrer">
+            <div class="card-topline"><span class="number">01</span><span class="status">Disponible</span></div>
+            <div class="card-visual quiz-visual" aria-hidden="true">
+              <span class="spark spark-one">✦</span><span class="spark spark-two">✦</span>
+              <div class="quiz-bubble">?</div>
+            </div>
+            <div class="card-content">
+              <p class="card-kicker">Apprendre &amp; jouer</p>
+              <h3>Quizz Biblique<br />Bible Open</h3>
+              <p>Des questions pour découvrir la Bible autrement, progresser et partager un moment stimulant.</p>
+              <span class="card-action">Ouvrir le projet <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+
+          <a class="app-card study-card" href="https://github.com/heritianahoseamelkizedeka-glitch/bo-bible-open" target="_blank" rel="noreferrer">
+            <div class="card-topline"><span class="number">02</span><span class="status">Disponible</span></div>
+            <div class="card-visual study-visual" aria-hidden="true">
+              <div class="sun"></div>
+              <div class="open-book"><span></span><span></span></div>
+            </div>
+            <div class="card-content">
+              <p class="card-kicker">Lire &amp; approfondir</p>
+              <h3>Study<br />Bible Open</h3>
+              <p>Un espace complet pour lire, annoter, étudier les textes et nourrir une réflexion personnelle.</p>
+              <span class="card-action">Ouvrir le projet <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand footer-brand" href="#accueil"><img src="/assets/bible-open-logo.svg" alt="" width="34" height="34" /><span>Bible <strong>Open</strong></span></a>
+      <p>Des outils numériques au service de la Parole.</p>
+      <p>© <span id="year"></span> Bible Open</p>
+    </footer>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
