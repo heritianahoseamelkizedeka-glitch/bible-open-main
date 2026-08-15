@@ -14,73 +14,89 @@
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#accueil" aria-label="Bible Open, accueil">
+      <a class="brand" href="#accueil" aria-label="Bible Open, accueil" data-i18n-aria="brandLabel">
         <img class="brand-logo" src="/assets/logo-bo-rouge.png" alt="Logo BO rouge" width="44" height="44" />
         <span>Bible <strong>Open</strong></span>
       </a>
-      <a class="header-link" href="#applications">Nos applications <span aria-hidden="true">↓</span></a>
+      <div class="header-actions">
+        <a class="header-link" href="#applications"><span data-i18n="navApps">Nos applications</span> <span aria-hidden="true">↓</span></a>
+        <label class="language-picker" aria-label="Choisir la langue" data-i18n-aria="languageLabel">
+          <span class="language-icon" aria-hidden="true">🌐</span>
+          <select id="language-select" aria-label="Choisir la langue" data-i18n-aria="languageLabel">
+            <option value="fr">🇫🇷 Français</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="mg">🇲🇬 Malagasy</option>
+          </select>
+        </label>
+      </div>
     </header>
 
     <main id="accueil">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow"><span></span> Une bibliothèque qui grandit avec vous</p>
-          <h1 id="hero-title">La Bible,<br /><em>ouverte à tous.</em></h1>
-          <p class="intro">Explorez les Écritures, approfondissez votre foi et testez vos connaissances grâce à des outils accessibles, pensés pour chaque jour.</p>
-          <a class="primary-button" href="#applications">Découvrir les applications <span aria-hidden="true">↘</span></a>
+          <p class="eyebrow"><span></span> <span data-i18n="heroEyebrow">Une bibliothèque qui grandit avec vous</span></p>
+          <h1 id="hero-title" data-i18n-html="heroTitle">La Bible,<br /><em>ouverte à tous.</em></h1>
+          <p class="intro" data-i18n="heroIntro">Explorez les Écritures, approfondissez votre foi et testez vos connaissances grâce à des outils accessibles, pensés pour chaque jour.</p>
+          <a class="primary-button" href="#applications"><span data-i18n="discover">Découvrir les applications</span> <span aria-hidden="true">↘</span></a>
         </div>
 
         <blockquote class="verse-card">
           <div class="verse-mark" aria-hidden="true">“</div>
-          <p>Ta parole est une lampe à mes pieds, et une lumière sur mon sentier.</p>
-          <footer><span></span> Psaume 119:105</footer>
+          <p data-i18n="verse">Ta parole est une lampe à mes pieds, et une lumière sur mon sentier.</p>
+          <footer><span></span> <span data-i18n="verseRef">Psaume 119:105</span></footer>
         </blockquote>
       </section>
 
       <section class="apps-section" id="applications" aria-labelledby="apps-title">
         <div class="section-heading">
           <div>
-            <p class="eyebrow"><span></span> L'écosystème Bible Open</p>
-            <h2 id="apps-title">Un même élan,<br />deux façons d’avancer.</h2>
+            <p class="eyebrow"><span></span> <span data-i18n="ecosystem">L'écosystème Bible Open</span></p>
+            <h2 id="apps-title" data-i18n-html="appsTitle">Un même élan,<br />deux façons d’avancer.</h2>
           </div>
-          <p>Choisissez votre chemin : apprendre en jouant ou prendre le temps d’étudier.</p>
+          <p data-i18n="appsIntro">Choisissez votre chemin : apprendre en jouant ou prendre le temps d’étudier.</p>
         </div>
 
         <div class="app-grid">
-          <a class="app-card quiz-card" href="http://localhost:5173/" aria-label="Ouvrir l’accueil de Quizz Biblique Bible Open">
-            <div class="card-topline"><span class="number">01</span><span class="status">Disponible</span></div>
+          <article class="app-card quiz-card">
+            <div class="card-topline"><span class="number">01</span><span class="status" data-i18n="available">Disponible</span></div>
             <div class="card-visual quiz-visual" aria-hidden="true">
-              <span class="spark spark-one">✦</span><span class="spark spark-two">✦</span>
-              <div class="quiz-bubble">?</div>
+              <img class="quiz-logo" src="/assets/logo-bible-open-quizz.png" alt="" width="1254" height="1254" />
             </div>
             <div class="card-content">
-              <p class="card-kicker">Apprendre &amp; jouer</p>
+              <p class="card-kicker" data-i18n="quizKicker">Apprendre &amp; jouer</p>
               <h3>Quizz Biblique<br />Bible Open</h3>
-              <p>Des questions pour découvrir la Bible autrement, progresser et partager un moment stimulant.</p>
-              <span class="card-action">Accéder au Quizz <span aria-hidden="true">→</span></span>
+              <p data-i18n="quizDescription">Des questions pour découvrir la Bible autrement, progresser et partager un moment stimulant.</p>
+              <div class="card-actions">
+                <a class="card-action" href="http://localhost:5173/"><span data-i18n="openQuiz">Accéder au Quizz</span> <span class="card-arrow" aria-hidden="true">→</span></a>
+                <a class="external-action" href="http://localhost:5173/" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
+              </div>
             </div>
-          </a>
+          </article>
 
-          <a class="app-card study-card" href="http://localhost:9891/" aria-label="Ouvrir l’accueil de Study Bible Open">
-            <div class="card-topline"><span class="number">02</span><span class="status">Disponible</span></div>
+          <article class="app-card study-card">
+            <div class="card-topline"><span class="number">02</span><span class="status" data-i18n="available">Disponible</span></div>
             <div class="card-visual study-visual" aria-hidden="true">
-              <div class="sun"></div>
-              <div class="open-book"><span></span><span></span></div>
+              <div class="study-logo-frame">
+                <img class="study-logo" src="/assets/logo-bo-bleu.png" alt="" width="512" height="512" />
+              </div>
             </div>
             <div class="card-content">
-              <p class="card-kicker">Lire &amp; approfondir</p>
+              <p class="card-kicker" data-i18n="studyKicker">Lire &amp; approfondir</p>
               <h3>Study<br />Bible Open</h3>
-              <p>Un espace complet pour lire, annoter, étudier les textes et nourrir une réflexion personnelle.</p>
-              <span class="card-action">Accéder à Study Bible <span aria-hidden="true">→</span></span>
+              <p data-i18n="studyDescription">Un espace complet pour lire, annoter, étudier les textes et nourrir une réflexion personnelle.</p>
+              <div class="card-actions">
+                <a class="card-action" href="http://localhost:9891/"><span data-i18n="openStudy">Accéder à Study Bible</span> <span class="card-arrow" aria-hidden="true">→</span></a>
+                <a class="external-action" href="http://localhost:9891/" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
+              </div>
             </div>
-          </a>
+          </article>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
       <a class="brand footer-brand" href="#accueil"><img class="brand-logo" src="/assets/logo-bo-rouge.png" alt="Logo BO rouge" width="34" height="34" /><span>Bible <strong>Open</strong></span></a>
-      <p>Des outils numériques au service de la Parole.</p>
+      <p data-i18n="footerTagline">Des outils numériques au service de la Parole.</p>
       <p>© <span id="year"></span> Bible Open</p>
     </footer>
     <script type="module" src="/main.js"></script>
