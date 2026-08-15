@@ -11,6 +11,7 @@ Backend/         Futurs services centraux
 Docs/            Documentation
 Frontend/web/    Application web Vite
 Launcher/Web/    Lanceur local PowerShell
+Scripts/export/  Exports coordonnés des trois dépôts
 ```
 
 ## Applications
@@ -41,3 +42,20 @@ Sous Windows, le lanceur démarre le portail, Quizz Biblique et Study Bible, pui
 ```powershell
 powershell -ExecutionPolicy Bypass -File Launcher/Web/launch-app.ps1
 ```
+
+## Exports liés
+
+L'export Web construit le portail, Quizz Biblique et Study Bible, puis crée une suite portable commune dans `Artifacts/exports/Web`. Lancez ensuite `start-all.bat` depuis le dossier généré.
+
+```powershell
+npm run export:web
+```
+
+L'export APK construit et rassemble les APK des deux applications mobiles liées dans `Artifacts/exports/APK` :
+
+```powershell
+npm run export:apk
+powershell -ExecutionPolicy Bypass -File Scripts/export/export-apk.ps1 -BuildType release -StudyServerUrl "https://votre-serveur-study.example"
+```
+
+Study Bible utilise l'URL serveur indiquée pour son APK ; sans `-StudyServerUrl`, son script détecte l'adresse locale comme auparavant.
