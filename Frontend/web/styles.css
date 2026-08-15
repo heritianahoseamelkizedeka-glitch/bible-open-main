@@ -32,6 +32,7 @@ a { color: inherit; }
 .site-header, .site-footer, .hero, .apps-section { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
 .site-header { height: 96px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-family: "Newsreader", serif; font-size: 24px; letter-spacing: -.04em; }
+.brand-logo { border-radius: 8px; object-fit: cover; }
 .brand strong { color: var(--red); font-weight: 600; }
 .header-link { font-size: 13px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: .08em; }
 .header-link span { color: var(--red); margin-left: 8px; }

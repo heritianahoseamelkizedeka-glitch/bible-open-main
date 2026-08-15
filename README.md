@@ -18,6 +18,11 @@ Launcher/Web/    Lanceur local PowerShell
 - Quizz Biblique Bible Open
 - Study Bible Open
 
+Les cartes ouvrent directement les pages d’accueil locales :
+
+- Quizz Biblique : `http://localhost:5173/`
+- Study Bible : `http://localhost:9891/`
+
 ## Développement
 
 ```bash
