@@ -1,4 +1,4 @@
-param([switch]$NoBrowser)
+param([switch]$NoBrowser, [switch]$ListOnly)
 
 $ErrorActionPreference = 'Stop'
 $mainRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -12,9 +12,14 @@ if (-not $npmCommand) {
 }
 
 $apps = @(
-    [PSCustomObject]@{ Name = 'Bible Open Main'; Root = Join-Path $mainRoot 'Frontend\web'; Url = 'http://localhost:5174/'; Arguments = @('run', 'dev', '--', '--port', '5174', '--strictPort') },
-    [PSCustomObject]@{ Name = 'Quizz Biblique'; Root = Join-Path $workspaceRoot 'APK Quizz Biblique BO v2\Frontend\web'; Url = 'http://localhost:5173/'; Arguments = @('run', 'dev', '--', '--port', '5173', '--strictPort') },
-    [PSCustomObject]@{ Name = 'Study Bible'; Root = Join-Path $workspaceRoot 'Study-bible-open\Frontend\web'; Url = 'http://localhost:9891/'; Arguments = @('run', 'dev') }
+    [PSCustomObject]@{ Name = 'Bible Open Main'; Root = Join-Path $mainRoot 'Frontend\web'; Url = 'http://localhost:5174/'; Arguments = @('run', 'dev', '--', '--port', '5174', '--strictPort'); Required = $true },
+    [PSCustomObject]@{ Name = 'Quizz Biblique'; Root = Join-Path $workspaceRoot 'APK Quizz Biblique BO v2\Frontend\web'; Url = 'http://localhost:5173/'; Arguments = @('run', 'dev', '--', '--port', '5173', '--strictPort'); Required = $true },
+    [PSCustomObject]@{ Name = 'Study Bible'; Root = Join-Path $workspaceRoot 'Study-bible-open\Frontend\web'; Url = 'http://localhost:9891/'; Arguments = @('run', 'dev'); Required = $true },
+    [PSCustomObject]@{ Name = 'Communaute Eglise'; Root = Join-Path $workspaceRoot 'communaute-eglise\Frontend\web'; Url = 'http://localhost:5180/'; Arguments = @('run', 'dev', '--', '--host', '0.0.0.0', '--port', '5180', '--strictPort'); Required = $true },
+    [PSCustomObject]@{ Name = 'Intendance Eglise'; Root = Join-Path $workspaceRoot 'intendance-eglise\Frontend\web'; Url = 'http://localhost:5190/'; Arguments = @('run', 'dev', '--', '--host', '0.0.0.0', '--port', '5190', '--strictPort'); Required = $true },
+    [PSCustomObject]@{ Name = 'Eglise Core'; Root = Join-Path $workspaceRoot 'eglise-core\Frontend\web'; Url = 'http://localhost:5181/'; Arguments = @('run', 'dev', '--', '--host', '0.0.0.0', '--port', '5181', '--strictPort'); Required = $false },
+    [PSCustomObject]@{ Name = 'Communication Eglise'; Root = Join-Path $workspaceRoot 'communication-eglise\Frontend\web'; Url = 'http://localhost:5182/'; Arguments = @('run', 'dev', '--', '--host', '0.0.0.0', '--port', '5182', '--strictPort'); Required = $false },
+    [PSCustomObject]@{ Name = 'Vie pastorale Eglise'; Root = Join-Path $workspaceRoot 'vie-pastorale-eglise\Frontend\web'; Url = 'http://localhost:5183/'; Arguments = @('run', 'dev', '--', '--host', '0.0.0.0', '--port', '5183', '--strictPort'); Required = $false }
 )
 
 function Test-AppReady {
@@ -25,6 +30,17 @@ function Test-AppReady {
     } catch { return $false }
 }
 
+if ($ListOnly) {
+    Write-Host 'Applications configurees dans le launcher principal :' -ForegroundColor Cyan
+    foreach ($app in $apps) {
+        $available = Test-Path -LiteralPath (Join-Path $app.Root 'package.json')
+        $status = if ($available) { 'PRETE' } else { 'NON CONSTRUITE' }
+        $color = if ($available) { 'Green' } else { 'DarkYellow' }
+        Write-Host " - [$status] $($app.Name) - $($app.Url)" -ForegroundColor $color
+    }
+    exit 0
+}
+
 if (Test-Path -LiteralPath $stateFile) {
     & (Join-Path $PSScriptRoot 'stop-app.ps1')
 }
@@ -33,8 +49,11 @@ $startedApps = @()
 
 try {
     foreach ($app in $apps) {
-        if (-not (Test-Path -LiteralPath $app.Root)) {
-            throw "Dossier introuvable pour $($app.Name) : $($app.Root)"
+        $packageFile = Join-Path $app.Root 'package.json'
+        if (-not (Test-Path -LiteralPath $packageFile)) {
+            if ($app.Required) { throw "Application requise introuvable pour $($app.Name) : $packageFile" }
+            Write-Host "NON DISPONIBLE - $($app.Name) (frontend pas encore construit)" -ForegroundColor DarkYellow
+            continue
         }
 
         if (Test-AppReady -Url $app.Url) {
@@ -76,5 +95,8 @@ catch {
     exit 1
 }
 
-Write-Host 'Les trois applications Bible Open sont disponibles.'
+Write-Host "`nEcosysteme Bible Open disponible :" -ForegroundColor Green
+foreach ($startedApp in $startedApps) {
+    Write-Host " - $($startedApp.Name) : $($startedApp.Url)" -ForegroundColor Green
+}
 if (-not $NoBrowser) { Start-Process 'http://localhost:5174/' }
