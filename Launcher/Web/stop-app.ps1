@@ -1,15 +1,23 @@
 $ErrorActionPreference = 'Stop'
-$pidFile = Join-Path $PSScriptRoot '.dev-server.pid'
+$stateFile = Join-Path $PSScriptRoot '.dev-servers.json'
 
-if (-not (Test-Path -LiteralPath $pidFile)) {
-    Write-Host 'Aucun serveur lancé par ce lanceur.'
+function Stop-ProcessTree {
+    param([int]$ProcessId)
+    $children = @(Get-CimInstance Win32_Process -Filter "ParentProcessId = $ProcessId" -ErrorAction SilentlyContinue)
+    foreach ($child in $children) { Stop-ProcessTree -ProcessId $child.ProcessId }
+    Stop-Process -Id $ProcessId -Force -ErrorAction SilentlyContinue
+}
+
+if (-not (Test-Path -LiteralPath $stateFile)) {
+    Write-Host 'Aucun serveur lance par le launcher principal.'
     exit 0
 }
 
-$serverProcessId = [int](Get-Content -LiteralPath $pidFile -Raw)
-$process = Get-Process -Id $serverProcessId -ErrorAction SilentlyContinue
-if ($process) {
-    Stop-Process -Id $serverProcessId -Force
-    Write-Host "Serveur Bible Open Main arrêté (PID $serverProcessId)."
+$servers = Get-Content -LiteralPath $stateFile -Raw | ConvertFrom-Json
+foreach ($server in $servers) {
+    if ($server.ProcessId) {
+        Stop-ProcessTree -ProcessId ([int]$server.ProcessId)
+        Write-Host "$($server.Name) arrete (PID $($server.ProcessId))."
+    }
 }
-Remove-Item -LiteralPath $pidFile -ErrorAction SilentlyContinue
+Remove-Item -LiteralPath $stateFile -ErrorAction SilentlyContinue

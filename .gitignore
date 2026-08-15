@@ -1,5 +1,6 @@
 node_modules/
 dist/
 .dev-server.pid
+.dev-servers.json
 .DS_Store
 *.local

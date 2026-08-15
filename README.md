@@ -36,7 +36,7 @@ Pour générer la version de production :
 npm run build
 ```
 
-Sous Windows, le lanceur démarre directement l’application sur le port `5174` :
+Sous Windows, le lanceur démarre le portail, Quizz Biblique et Study Bible, puis ouvre le portail sur le port `5174` :
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File Launcher/Web/launch-app.ps1
