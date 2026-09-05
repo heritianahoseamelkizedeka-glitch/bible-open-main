@@ -1,6 +1,21 @@
-param([switch]$NoBrowser, [switch]$ListOnly)
+param(
+    [switch]$NoBrowser,
+    [switch]$ListOnly,
+    [switch]$CheckOnly,
+    [switch]$RequireCore,
+    [string]$CoreApiUrl = $(if ($env:CORE_API_URL) { $env:CORE_API_URL } else { 'http://127.0.0.1:8085/api/v1' })
+)
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'core-readiness.ps1')
+if ($CheckOnly -and $ListOnly) { throw 'Choisir CheckOnly ou ListOnly.' }
+if (-not $ListOnly) {
+    $coreReady = Test-CoreReady -ApiUrl $CoreApiUrl
+    if ($coreReady) { Write-Host 'OK - API Core prete (base et migrations).' -ForegroundColor Green }
+    else { Write-Warning 'API Core non prete. Authentification et fonctions dependantes indisponibles. Demarrer/configurer Core et ses migrations.' }
+    if ($CheckOnly) { if ($coreReady) { exit 0 } else { exit 1 } }
+    if ($RequireCore -and -not $coreReady) { throw 'Demarrage annule : API Core non prete. Aucun processus arrete ou lance.' }
+}
 $mainRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $workspaceRoot = Split-Path -Parent $mainRoot
 $stateFile = Join-Path $PSScriptRoot '.dev-servers.json'
@@ -34,7 +49,7 @@ if ($ListOnly) {
     Write-Host 'Applications configurees dans le launcher principal :' -ForegroundColor Cyan
     foreach ($app in $apps) {
         $available = Test-Path -LiteralPath (Join-Path $app.Root 'package.json')
-        $status = if ($available) { 'PRETE' } else { 'NON CONSTRUITE' }
+        $status = if ($available) { 'MANIFESTE PRESENT' } else { 'NON CONSTRUITE' }
         $color = if ($available) { 'Green' } else { 'DarkYellow' }
         Write-Host " - [$status] $($app.Name) - $($app.Url)" -ForegroundColor $color
     }
@@ -95,7 +110,8 @@ catch {
     exit 1
 }
 
-Write-Host "`nEcosysteme Bible Open disponible :" -ForegroundColor Green
+Write-Host "`nFrontends Bible Open disponibles :" -ForegroundColor Green
+if (-not $coreReady) { Write-Warning 'Mode degrade : API Core non prete lors du controle initial.' }
 foreach ($startedApp in $startedApps) {
     Write-Host " - $($startedApp.Name) : $($startedApp.Url)" -ForegroundColor Green
 }
