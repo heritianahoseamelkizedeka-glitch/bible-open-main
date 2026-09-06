@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - phase-1-hardening
   pull_request:
     branches:
       - main
@@ -13,7 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  build-and-audit:
+  test-build-audit:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -29,6 +28,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Test registry contract
+        run: npm test
 
       - name: Build portal
         run: npm run build
