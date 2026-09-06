@@ -1,6 +1,29 @@
+# Dependencies and builds
 node_modules/
 dist/
+coverage/
+Artifacts/exports/
+*.apk
+
+# Local runtime state
 .dev-server.pid
 .dev-servers.json
-.DS_Store
+*.log
+npm-debug.log*
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
 *.local
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
