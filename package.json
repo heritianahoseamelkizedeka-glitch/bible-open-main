@@ -4,12 +4,18 @@
   "description": "Portail central de l'écosystème Bible Open",
   "private": true,
   "scripts": {
-    "dev": "npm --prefix Frontend/web run dev",
-    "build": "npm --prefix Frontend/web run build",
-    "preview": "npm --prefix Frontend/web run preview",
+    "dev": "npm --workspace Frontend/web run dev",
+    "build": "npm --workspace Frontend/web run build",
+    "preview": "npm --workspace Frontend/web run preview",
+    "ci": "npm run build && npm audit --audit-level=high",
     "export:web": "powershell -ExecutionPolicy Bypass -File Scripts/export/export-web.ps1",
     "export:apk": "powershell -ExecutionPolicy Bypass -File Scripts/export/export-apk.ps1"
   },
-  "workspaces": ["Frontend/web"],
-  "engines": { "node": ">=20.0.0", "npm": ">=10.0.0" }
+  "workspaces": [
+    "Frontend/web"
+  ],
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0",
+    "npm": ">=10.0.0"
+  }
 }
