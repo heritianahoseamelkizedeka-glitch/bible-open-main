@@ -57,8 +57,8 @@
         </div>
 
         <div class="app-grid">
-          <article class="app-card quiz-card">
-            <div class="card-topline"><span class="number">01</span><span class="status" data-i18n="available">Disponible</span></div>
+          <article class="app-card quiz-card" data-app-card="quiz">
+            <div class="card-topline"><span class="number">01</span><span class="status" data-app-status="quiz" data-i18n="available">Disponible</span></div>
             <div class="card-visual quiz-visual" aria-hidden="true">
               <img class="quiz-logo" src="/assets/logo-bible-open-quizz.png" alt="" width="1254" height="1254" />
             </div>
@@ -67,14 +67,14 @@
               <h3>Quizz Biblique<br />Bible Open</h3>
               <p data-i18n="quizDescription">Des questions pour découvrir la Bible autrement, progresser et partager un moment stimulant.</p>
               <div class="card-actions">
-                <a class="card-action" href="http://localhost:5173/"><span data-i18n="openQuiz">Accéder au Quizz</span> <span class="card-arrow" aria-hidden="true">→</span></a>
-                <a class="external-action" href="http://localhost:5173/" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
+                <a class="card-action" href="#" data-app-link="quiz"><span data-i18n="openQuiz">Accéder au Quizz</span> <span class="card-arrow" aria-hidden="true">→</span></a>
+                <a class="external-action" href="#" data-app-link="quiz" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
 
-          <article class="app-card study-card">
-            <div class="card-topline"><span class="number">02</span><span class="status" data-i18n="available">Disponible</span></div>
+          <article class="app-card study-card" data-app-card="study">
+            <div class="card-topline"><span class="number">02</span><span class="status" data-app-status="study" data-i18n="available">Disponible</span></div>
             <div class="card-visual study-visual" aria-hidden="true">
               <div class="study-logo-frame">
                 <img class="study-logo" src="/assets/logo-bo-bleu.png" alt="" width="512" height="512" />
@@ -85,8 +85,8 @@
               <h3>Study<br />Bible Open</h3>
               <p data-i18n="studyDescription">Un espace complet pour lire, annoter, étudier les textes et nourrir une réflexion personnelle.</p>
               <div class="card-actions">
-                <a class="card-action" href="http://localhost:9891/"><span data-i18n="openStudy">Accéder à Study Bible</span> <span class="card-arrow" aria-hidden="true">→</span></a>
-                <a class="external-action" href="http://localhost:9891/" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
+                <a class="card-action" href="#" data-app-link="study"><span data-i18n="openStudy">Accéder à Study Bible</span> <span class="card-arrow" aria-hidden="true">→</span></a>
+                <a class="external-action" href="#" data-app-link="study" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
