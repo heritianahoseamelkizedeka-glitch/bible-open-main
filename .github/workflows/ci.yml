@@ -32,6 +32,13 @@ jobs:
       - name: Test registry contract
         run: npm test
 
+      - name: Validate PowerShell launcher syntax
+        shell: pwsh
+        run: |
+          $null = [scriptblock]::Create((Get-Content 'Launcher/Web/launch-app.ps1' -Raw))
+          $null = [scriptblock]::Create((Get-Content 'Launcher/Web/stop-app.ps1' -Raw))
+          $null = [scriptblock]::Create((Get-Content 'Launcher/Web/core-readiness.ps1' -Raw))
+
       - name: Build portal
         run: npm run build
 
