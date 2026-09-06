@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "applications": {
+    "portal": {
+      "name": "Bible Open Main",
+      "port": 5174,
+      "localUrl": "http://localhost:5174/",
+      "productionUrl": "",
+      "rootType": "main",
+      "rootPath": "Frontend/web"
+    },
+    "quiz": {
+      "name": "Quizz Biblique",
+      "port": 5173,
+      "localUrl": "http://localhost:5173/",
+      "productionUrl": "",
+      "rootType": "workspace",
+      "rootPath": "APK Quizz Biblique BO v2/Frontend/web",
+      "rootEnv": "BIBLE_OPEN_QUIZ_ROOT"
+    },
+    "study": {
+      "name": "Study Bible",
+      "port": 9891,
+      "localUrl": "http://localhost:9891/",
+      "productionUrl": "",
+      "rootType": "workspace",
+      "rootPath": "Study-bible-open",
+      "rootEnv": "BIBLE_OPEN_STUDY_ROOT"
+    }
+  }
+}
