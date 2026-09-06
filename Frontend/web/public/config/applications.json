@@ -7,7 +7,8 @@
       "localUrl": "http://localhost:5174/",
       "productionUrl": "",
       "rootType": "main",
-      "rootPath": "Frontend/web"
+      "rootPath": ".",
+      "webPath": "Frontend/web"
     },
     "quiz": {
       "name": "Quizz Biblique",
@@ -15,8 +16,9 @@
       "localUrl": "http://localhost:5173/",
       "productionUrl": "",
       "rootType": "workspace",
-      "rootPath": "APK Quizz Biblique BO v2/Frontend/web",
-      "rootEnv": "BIBLE_OPEN_QUIZ_ROOT"
+      "rootPath": "APK Quizz Biblique BO v2",
+      "rootEnv": "BIBLE_OPEN_QUIZ_ROOT",
+      "webPath": "Frontend/web"
     },
     "study": {
       "name": "Study Bible",
@@ -25,7 +27,8 @@
       "productionUrl": "",
       "rootType": "workspace",
       "rootPath": "Study-bible-open",
-      "rootEnv": "BIBLE_OPEN_STUDY_ROOT"
+      "rootEnv": "BIBLE_OPEN_STUDY_ROOT",
+      "webPath": "Frontend/web"
     }
   }
 }
