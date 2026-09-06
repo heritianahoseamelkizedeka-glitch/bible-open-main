@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "applications": {
     "portal": {
       "name": "Bible Open Main",
@@ -8,7 +8,8 @@
       "productionUrl": "",
       "rootType": "main",
       "rootPath": ".",
-      "webPath": "Frontend/web"
+      "webPath": "Frontend/web",
+      "required": true
     },
     "quiz": {
       "name": "Quizz Biblique",
@@ -18,7 +19,8 @@
       "rootType": "workspace",
       "rootPath": "APK Quizz Biblique BO v2",
       "rootEnv": "BIBLE_OPEN_QUIZ_ROOT",
-      "webPath": "Frontend/web"
+      "webPath": "Frontend/web",
+      "required": true
     },
     "study": {
       "name": "Study Bible",
@@ -28,7 +30,74 @@
       "rootType": "workspace",
       "rootPath": "Study-bible-open",
       "rootEnv": "BIBLE_OPEN_STUDY_ROOT",
-      "webPath": "Frontend/web"
+      "webPath": "Frontend/web",
+      "required": true
+    },
+    "community": {
+      "name": "Communauté Église",
+      "port": 5180,
+      "localUrl": "http://localhost:5180/",
+      "productionUrl": "",
+      "rootType": "workspace",
+      "rootPath": "communaute-eglise",
+      "rootEnv": "BIBLE_OPEN_COMMUNITY_ROOT",
+      "webPath": "Frontend/web",
+      "required": false
+    },
+    "core": {
+      "name": "Église Core",
+      "port": 5181,
+      "localUrl": "http://localhost:5181/",
+      "productionUrl": "",
+      "rootType": "workspace",
+      "rootPath": "eglise-core",
+      "rootEnv": "BIBLE_OPEN_CORE_ROOT",
+      "webPath": "Frontend/web",
+      "required": false
+    },
+    "communication": {
+      "name": "Communication Église",
+      "port": 5182,
+      "localUrl": "http://localhost:5182/",
+      "productionUrl": "",
+      "rootType": "workspace",
+      "rootPath": "communication-eglise",
+      "rootEnv": "BIBLE_OPEN_COMMUNICATION_ROOT",
+      "webPath": "Frontend/web",
+      "required": false
+    },
+    "stewardship": {
+      "name": "Intendance Église",
+      "port": 5190,
+      "localUrl": "http://localhost:5190/",
+      "productionUrl": "",
+      "rootType": "workspace",
+      "rootPath": "intendance-eglise",
+      "rootEnv": "BIBLE_OPEN_STEWARDSHIP_ROOT",
+      "webPath": "Frontend/web",
+      "required": false
+    },
+    "pastoral": {
+      "name": "Vie pastorale Église",
+      "port": 5183,
+      "localUrl": "http://localhost:5183/",
+      "productionUrl": "",
+      "rootType": "workspace",
+      "rootPath": "vie-pastorale-eglise",
+      "rootEnv": "BIBLE_OPEN_PASTORAL_ROOT",
+      "webPath": "Frontend/web",
+      "required": false
+    },
+    "worship": {
+      "name": "Louange Église",
+      "port": 5184,
+      "localUrl": "http://localhost:5184/",
+      "productionUrl": "",
+      "rootType": "workspace",
+      "rootPath": "louange-eglise",
+      "rootEnv": "BIBLE_OPEN_WORSHIP_ROOT",
+      "webPath": ".",
+      "required": false
     }
   }
 }
