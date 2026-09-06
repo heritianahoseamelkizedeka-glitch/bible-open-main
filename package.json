@@ -7,7 +7,8 @@
     "dev": "npm --workspace Frontend/web run dev",
     "build": "npm --workspace Frontend/web run build",
     "preview": "npm --workspace Frontend/web run preview",
-    "ci": "npm run build && npm audit --audit-level=high",
+    "test": "node --test Tests/*.test.mjs",
+    "ci": "npm test && npm run build && npm audit --audit-level=high",
     "export:web": "powershell -ExecutionPolicy Bypass -File Scripts/export/export-web.ps1",
     "export:apk": "powershell -ExecutionPolicy Bypass -File Scripts/export/export-apk.ps1"
   },
