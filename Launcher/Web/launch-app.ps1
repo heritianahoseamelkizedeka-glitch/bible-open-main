@@ -9,90 +9,199 @@ param(
 
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'core-readiness.ps1')
-$coreReady = $false
+
 if ($CheckOnly -and $ListOnly) { throw 'Choisir CheckOnly ou ListOnly.' }
-if (-not $ListOnly -and -not $StartApis) {
-    $coreReady = Test-CoreReady -ApiUrl $CoreApiUrl
-    if ($coreReady) { Write-Host 'OK - API Core prete (base et migrations).' -ForegroundColor Green }
-    else { Write-Warning 'API Core non prete. Authentification et fonctions dependantes indisponibles. Demarrer/configurer Core et ses migrations.' }
-    if ($CheckOnly) { if ($coreReady) { exit 0 } else { exit 1 } }
-    if ($RequireCore -and -not $coreReady) { throw 'Demarrage annule : API Core non prete. Aucun processus arrete ou lance.' }
-}
+
 $mainRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $workspaceRoot = Split-Path -Parent $mainRoot
 $stateFile = Join-Path $PSScriptRoot '.dev-servers.json'
 $configPath = Join-Path $mainRoot 'Frontend\web\public\config\applications.json'
 $npmCommand = Get-Command npm.cmd -ErrorAction SilentlyContinue
-$nodeCommand = Get-Command node.exe -ErrorAction SilentlyContinue
 
 if (-not $npmCommand) {
     Write-Error 'npm est introuvable. Installez Node.js avec npm, puis relancez le launcher.'
     exit 1
 }
 
-$apps = @(
-    [PSCustomObject]@{ Name = 'Bible Open Main'; Root = Join-Path $mainRoot 'Frontend\web'; Url = 'http://localhost:5174/'; Arguments = @('run', 'dev', '--', '--port', '5174', '--strictPort') },
-    [PSCustomObject]@{ Name = 'Quizz Biblique'; Root = Join-Path $workspaceRoot 'APK Quizz Biblique BO v2\Frontend\web'; Url = 'http://localhost:5173/'; Arguments = @('run', 'dev', '--', '--port', '5173', '--strictPort') },
-    [PSCustomObject]@{ Name = 'Study Bible'; Root = Join-Path $workspaceRoot 'Study-bible-open\Frontend\web'; Url = 'http://localhost:9891/'; Arguments = @('run', 'dev') }
-)
+if (-not (Test-Path -LiteralPath $configPath)) {
+    Write-Error "Registre d'applications introuvable : $configPath"
+    exit 1
+}
 
-function Test-AppReady {
+$registry = Get-Content -LiteralPath $configPath -Raw | ConvertFrom-Json
+if (-not $registry.applications) {
+    Write-Error 'Le registre des applications est invalide : section applications absente.'
+    exit 1
+}
+
+function Resolve-RepositoryRoot {
+    param($Definition)
+
+    if ([string]$Definition.rootType -eq 'main') { return $mainRoot }
+
+    if ($Definition.rootEnv) {
+        $override = [Environment]::GetEnvironmentVariable([string]$Definition.rootEnv)
+        if (-not [string]::IsNullOrWhiteSpace($override)) { return $override }
+    }
+
+    return Join-Path $workspaceRoot ([string]$Definition.rootPath)
+}
+
+function Resolve-WebRoot {
+    param([string]$RepositoryRoot, [string]$WebPath)
+    if ([string]::IsNullOrWhiteSpace($WebPath) -or $WebPath -eq '.') { return $RepositoryRoot }
+    return Join-Path $RepositoryRoot $WebPath
+}
+
+function Test-HttpReady {
     param([string]$Url)
     try {
-        $response = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 3
+        $response = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 3 -MaximumRedirection 0 -ErrorAction Stop
         return $response.StatusCode -ge 200 -and $response.StatusCode -lt 400
     } catch { return $false }
 }
 
+if ($CheckOnly) {
+    $coreReady = Test-CoreReady -ApiUrl $CoreApiUrl
+    if ($coreReady) {
+        Write-Host 'OK - API Core prete (base et migrations).' -ForegroundColor Green
+        exit 0
+    }
+    Write-Warning 'API Core non prete.'
+    exit 1
+}
+
+$apps = @()
+foreach ($property in $registry.applications.PSObject.Properties) {
+    $appId = [string]$property.Name
+    $definition = $property.Value
+    $repoRoot = Resolve-RepositoryRoot -Definition $definition
+    $webRoot = Resolve-WebRoot -RepositoryRoot $repoRoot -WebPath ([string]$definition.webPath)
+    $port = [int]$definition.port
+
+    $arguments = if ($appId -eq 'study') {
+        @('run', 'dev')
+    } else {
+        @('run', 'dev', '--', '--host', '0.0.0.0', '--port', [string]$port, '--strictPort')
+    }
+
+    $apps += [PSCustomObject]@{
+        Id = $appId
+        Name = [string]$definition.name
+        Root = $webRoot
+        Url = [string]$definition.localUrl
+        Arguments = $arguments
+        Required = [bool]$definition.required
+        Kind = 'frontend'
+    }
+}
+
+$apis = @()
+if ($StartApis) {
+    $apis = @(
+        [PSCustomObject]@{ Id = 'core-api'; Name = 'Eglise Core API'; Root = Join-Path $workspaceRoot 'eglise-core\Backend'; Url = ($CoreApiUrl.TrimEnd('/') + '/ready'); Arguments = @('run', 'dev'); Required = $RequireCore; Kind = 'core-api' },
+        [PSCustomObject]@{ Id = 'communication-api'; Name = 'Communication Eglise API'; Root = Join-Path $workspaceRoot 'communication-eglise\Backend'; Url = 'http://127.0.0.1:8082/api/v1/communication/health'; Arguments = @('run', 'dev'); Required = $false; Kind = 'api' },
+        [PSCustomObject]@{ Id = 'pastoral-api'; Name = 'Vie pastorale Eglise API'; Root = Join-Path $workspaceRoot 'vie-pastorale-eglise\Backend'; Url = 'http://127.0.0.1:8083/api/v1/pastoral/health'; Arguments = @('run', 'dev'); Required = $false; Kind = 'api' },
+        [PSCustomObject]@{ Id = 'worship-api'; Name = 'Louange Eglise API'; Root = Join-Path $workspaceRoot 'louange-eglise\Backend'; Url = 'http://127.0.0.1:8086/api/v1/louange/health'; Arguments = @('run', 'dev'); Required = $false; Kind = 'api' }
+    )
+}
+
 if ($ListOnly) {
     Write-Host 'Applications configurees dans le launcher principal :' -ForegroundColor Cyan
-    foreach ($app in $apps) {
-        $available = Test-Path -LiteralPath (Join-Path $app.Root 'package.json')
+    foreach ($target in @($apis) + @($apps)) {
+        $available = Test-Path -LiteralPath (Join-Path $target.Root 'package.json')
         $status = if ($available) { 'MANIFESTE PRESENT' } else { 'NON CONSTRUITE' }
         $color = if ($available) { 'Green' } else { 'DarkYellow' }
-        Write-Host " - [$status] $($app.Name) - $($app.Url)" -ForegroundColor $color
+        Write-Host " - [$status] $($target.Name) - $($target.Url)" -ForegroundColor $color
     }
     exit 0
 }
 
-if (Test-Path -LiteralPath $stateFile) { & (Join-Path $PSScriptRoot 'stop-app.ps1') }
-$startedApps = @()
+if (-not $StartApis) {
+    $coreReady = Test-CoreReady -ApiUrl $CoreApiUrl
+    if ($coreReady) {
+        Write-Host 'OK - API Core prete (base et migrations).' -ForegroundColor Green
+    } else {
+        Write-Warning 'API Core non prete. Authentification et fonctions dependantes seront indisponibles.'
+        if ($RequireCore) { throw 'Demarrage annule : API Core non prete.' }
+    }
+}
 
-try {
-    foreach ($app in $apps) {
-        if (-not (Test-Path -LiteralPath $app.Root)) {
-            throw "Dossier introuvable pour $($app.Name) : $($app.Root)"
-        }
+if (Test-Path -LiteralPath $stateFile) {
+    & (Join-Path $PSScriptRoot 'stop-app.ps1')
+}
 
-        if (Test-AppReady -Url $app.Url) {
-            Write-Host "$($app.Name) est deja disponible sur $($app.Url)"
-            $startedApps += [PSCustomObject]@{ Name = $app.Name; ProcessId = $null; Url = $app.Url }
-            continue
-        }
+$startedTargets = @()
 
-        if (-not (Test-Path -LiteralPath (Join-Path $app.Root 'node_modules'))) {
-            Write-Host "Installation des dependances de $($app.Name)..."
-            & $npmCommand.Source install --prefix $app.Root
-            if ($LASTEXITCODE -ne 0) { throw "Echec de npm install pour $($app.Name)." }
-        }
+function Save-LauncherState {
+    $startedTargets | ConvertTo-Json | Set-Content -LiteralPath $stateFile -Encoding utf8
+}
 
-        Write-Host "Demarrage de $($app.Name)..."
-        $process = Start-Process -FilePath $npmCommand.Source -ArgumentList $app.Arguments -WorkingDirectory $app.Root -WindowStyle Hidden -PassThru
-        $startedApps += [PSCustomObject]@{ Name = $app.Name; ProcessId = $process.Id; Url = $app.Url }
-        $startedApps | ConvertTo-Json | Set-Content -LiteralPath $stateFile -Encoding utf8
+function Start-Target {
+    param($Target)
+
+    $packageFile = Join-Path $Target.Root 'package.json'
+    if (-not (Test-Path -LiteralPath $packageFile)) {
+        if ($Target.Required) { throw "Application requise introuvable pour $($Target.Name) : $packageFile" }
+        Write-Host "NON DISPONIBLE - $($Target.Name)" -ForegroundColor DarkYellow
+        return
     }
 
-    foreach ($startedApp in $startedApps) {
+    $alreadyReady = if ($Target.Kind -eq 'core-api') {
+        Test-CoreReady -ApiUrl $CoreApiUrl
+    } else {
+        Test-HttpReady -Url $Target.Url
+    }
+
+    if ($alreadyReady) {
+        Write-Host "$($Target.Name) est deja disponible sur $($Target.Url)"
+        $script:startedTargets += [PSCustomObject]@{ Name = $Target.Name; ProcessId = $null; StartedAt = $null; Url = $Target.Url; Kind = $Target.Kind }
+        return
+    }
+
+    if (-not (Test-Path -LiteralPath (Join-Path $Target.Root 'node_modules'))) {
+        Write-Host "Installation des dependances de $($Target.Name)..."
+        & $npmCommand.Source install --prefix $Target.Root
+        if ($LASTEXITCODE -ne 0) { throw "Echec de npm install pour $($Target.Name)." }
+    }
+
+    Write-Host "Demarrage de $($Target.Name)..."
+    $process = Start-Process -FilePath $npmCommand.Source -ArgumentList $Target.Arguments -WorkingDirectory $Target.Root -WindowStyle Hidden -PassThru
+    $process.Refresh()
+    $script:startedTargets += [PSCustomObject]@{
+        Name = $Target.Name
+        ProcessId = $process.Id
+        StartedAt = $process.StartTime.ToUniversalTime().ToString('o')
+        Url = $Target.Url
+        Kind = $Target.Kind
+    }
+    Save-LauncherState
+}
+
+try {
+    foreach ($api in $apis) { Start-Target -Target $api }
+    foreach ($app in $apps) { Start-Target -Target $app }
+
+    foreach ($startedTarget in $startedTargets) {
         $ready = $false
         $deadline = (Get-Date).AddSeconds(120)
         while ((Get-Date) -lt $deadline) {
-            if ($startedApp.ProcessId -and -not (Get-Process -Id $startedApp.ProcessId -ErrorAction SilentlyContinue)) { throw "$($startedApp.Name) s'est arrete avant de repondre." }
-            if (Test-AppReady -Url $startedApp.Url) { $ready = $true; break }
+            if ($startedTarget.ProcessId -and -not (Get-Process -Id $startedTarget.ProcessId -ErrorAction SilentlyContinue)) {
+                throw "$($startedTarget.Name) s'est arrete avant de repondre."
+            }
+
+            $ready = if ($startedTarget.Kind -eq 'core-api') {
+                Test-CoreReady -ApiUrl $CoreApiUrl
+            } else {
+                Test-HttpReady -Url $startedTarget.Url
+            }
+
+            if ($ready) { break }
             Start-Sleep -Milliseconds 500
         }
-        if (-not $ready) { throw "$($startedApp.Name) ne repond pas sur $($startedApp.Url) apres 120 secondes." }
-        if ($startedApp.Name -eq 'Eglise Core API') { $coreReady = $true }
-        Write-Host "OK - $($startedApp.Name) : $($startedApp.Url)"
+
+        if (-not $ready) { throw "$($startedTarget.Name) ne repond pas sur $($startedTarget.Url) apres 120 secondes." }
+        Write-Host "OK - $($startedTarget.Name) : $($startedTarget.Url)" -ForegroundColor Green
     }
 }
 catch {
@@ -102,5 +211,16 @@ catch {
     exit 1
 }
 
-Write-Host 'Les trois applications Bible Open sont disponibles.'
-if (-not $NoBrowser) { Start-Process 'http://localhost:5174/' }
+Write-Host "`nBible Open est disponible :" -ForegroundColor Green
+foreach ($startedTarget in $startedTargets) {
+    Write-Host " - $($startedTarget.Name) : $($startedTarget.Url)" -ForegroundColor Green
+}
+
+if (-not $StartApis -and -not $coreReady) {
+    Write-Warning 'Mode degrade : API Core non prete.'
+}
+
+if (-not $NoBrowser) {
+    $portal = $registry.applications.portal
+    Start-Process ([string]$portal.localUrl)
+}
