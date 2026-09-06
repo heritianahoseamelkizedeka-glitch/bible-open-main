@@ -1,8 +1,12 @@
 # Lanceur Web
 
-- `launch-app.ps1` démarre le portail et toutes les applications construites de l'écosystème.
-- `launch-app.ps1 -StartApis` démarre aussi les APIs Core, Communication et Pastorale avant les frontends.
-- `stop-app.ps1` arrête proprement tous les processus créés par ce lanceur.
+Le launcher principal utilise `Frontend/web/public/config/applications.json` comme source de vérité pour les frontends de la plateforme.
+
+- `launch-app.ps1` démarre le portail et les applications dont le manifeste est présent.
+- `launch-app.ps1 -StartApis` démarre aussi les APIs Core, Communication, Vie pastorale et Louange.
+- `stop-app.ps1` arrête uniquement les processus enregistrés par le launcher.
+
+## Frontends
 
 | Application | Adresse locale |
 | --- | --- |
@@ -14,52 +18,57 @@
 | Communication Église | `http://localhost:5182` |
 | Vie pastorale Église | `http://localhost:5183` |
 | Louange Église | `http://localhost:5184` |
-
-API Louange : `http://localhost:8086/api/v1/louange`
 | Intendance Église | `http://localhost:5190` |
 
-Les dépôts dont le frontend n'est pas encore construit sont signalés puis ignorés. Ils seront automatiquement intégrés dès qu'un fichier `Frontend/web/package.json` sera présent.
+## APIs optionnelles
+
+| API | Adresse de contrôle |
+| --- | --- |
+| Église Core | `http://127.0.0.1:8085/api/v1/ready` |
+| Communication Église | `http://127.0.0.1:8082/api/v1/communication/health` |
+| Vie pastorale Église | `http://127.0.0.1:8083/api/v1/pastoral/health` |
+| Louange Église | `http://127.0.0.1:8086/api/v1/louange/health` |
+
+## Démarrage standard
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File Launcher/Web/launch-app.ps1
 ```
 
-Ajoutez `-NoBrowser` pour ne pas ouvrir automatiquement le navigateur.
+Ajouter `-NoBrowser` pour ne pas ouvrir automatiquement le portail.
 
-## Disponibilité de Core
+## Démarrage avec les APIs
 
-Avant le démarrage, le launcher vérifie `/api/v1/ready` et exige une réponse 200
-avec `status=ready` et `service=eglise-core-api`. Une page HTML, une redirection
-ou le simple endpoint `/health` ne sont pas considérés comme Core prêt.
-Ce contrôle initial ne constitue pas une surveillance continue.
-
-Par défaut, Core indisponible produit un avertissement de mode dégradé et permet
-le démarrage des frontends. `-RequireCore` annule le démarrage avant tout arrêt
-ou lancement de processus si Core n'est pas prêt.
+Les APIs NestJS nécessitent leur configuration locale, notamment la base de données lorsque le module l'exige.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File Launcher/Web/launch-app.ps1 -CheckOnly
-powershell -ExecutionPolicy Bypass -File Launcher/Web/launch-app.ps1 -RequireCore -NoBrowser
+powershell -ExecutionPolicy Bypass -File Launcher/Web/launch-app.ps1 -StartApis -NoBrowser
 ```
 
-`-CheckOnly` effectue uniquement le diagnostic Core : code de sortie 0 si prêt,
-1 sinon. Il ne requiert pas npm et ne touche pas au fichier d'état des processus.
-L'adresse de base est choisie par `-CoreApiUrl`, puis `CORE_API_URL`, puis
-`http://127.0.0.1:8085/api/v1`. Aucun identifiant, query ou fragment n'est accepté
-dans cette URL. Les APIs et les migrations ne sont pas démarrées automatiquement.
-
-Pour démarrer les APIs avec les frontends, après avoir préparé PostgreSQL Core et
-son fichier `eglise-core/Backend/.runtime/database.env` :
+Pour exiger que Core soit prêt :
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File Launcher/Web/launch-app.ps1 -StartApis -RequireCore -NoBrowser
 ```
 
-Tests du contrôle : `powershell -ExecutionPolicy Bypass -File Launcher/Web/test-core-readiness.ps1`.
+## Diagnostic Core
 
-Pour afficher les applications et la présence de leurs manifestes sans rien démarrer
-ni interroger Core (`-ListOnly` ne prouve pas leur disponibilité HTTP) :
+```powershell
+powershell -ExecutionPolicy Bypass -File Launcher/Web/launch-app.ps1 -CheckOnly
+```
+
+Le contrôle Core exige `/api/v1/ready` avec une réponse 200 identifiant `eglise-core-api` comme prêt. L'adresse de base peut être remplacée avec `-CoreApiUrl` ou `CORE_API_URL`.
+
+## Inventaire sans démarrage
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File Launcher/Web/launch-app.ps1 -ListOnly
 ```
+
+Avec `-StartApis -ListOnly`, le launcher affiche aussi les manifestes des APIs.
+
+## Chemins locaux personnalisés
+
+Les dépôts sont normalement placés à côté de `bible-open-main`. Une autre organisation peut être utilisée avec les variables documentées dans `.env.example`, par exemple `BIBLE_OPEN_WORSHIP_ROOT` ou `BIBLE_OPEN_CORE_ROOT`.
+
+Le registre central doit être mis à jour lorsqu'une nouvelle application rejoint la plateforme ; le portail et le launcher l'utiliseront ensuite sans dupliquer les ports et chemins dans plusieurs fichiers.

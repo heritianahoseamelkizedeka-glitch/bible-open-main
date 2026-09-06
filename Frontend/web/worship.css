@@ -1,0 +1,13 @@
+.app-card:nth-child(8) {
+  transition-delay: .4s;
+}
+
+.worship-card {
+  background: #4d3f67;
+}
+
+.worship-card::before {
+  background:
+    radial-gradient(circle at 72% 20%, #b79ad5 0, transparent 38%),
+    linear-gradient(135deg, #332b4f, #71517d);
+}
