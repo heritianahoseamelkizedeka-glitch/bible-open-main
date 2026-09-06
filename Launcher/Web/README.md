@@ -1,6 +1,7 @@
 # Lanceur Web
 
 - `launch-app.ps1` démarre le portail et toutes les applications construites de l'écosystème.
+- `launch-app.ps1 -StartApis` démarre aussi les APIs Core, Communication et Pastorale avant les frontends.
 - `stop-app.ps1` arrête proprement tous les processus créés par ce lanceur.
 
 | Application | Adresse locale |
@@ -12,6 +13,9 @@
 | Église Core | `http://localhost:5181` |
 | Communication Église | `http://localhost:5182` |
 | Vie pastorale Église | `http://localhost:5183` |
+| Louange Église | `http://localhost:5184` |
+
+API Louange : `http://localhost:8086/api/v1/louange`
 | Intendance Église | `http://localhost:5190` |
 
 Les dépôts dont le frontend n'est pas encore construit sont signalés puis ignorés. Ils seront automatiquement intégrés dès qu'un fichier `Frontend/web/package.json` sera présent.
@@ -43,6 +47,13 @@ powershell -ExecutionPolicy Bypass -File Launcher/Web/launch-app.ps1 -RequireCor
 L'adresse de base est choisie par `-CoreApiUrl`, puis `CORE_API_URL`, puis
 `http://127.0.0.1:8085/api/v1`. Aucun identifiant, query ou fragment n'est accepté
 dans cette URL. Les APIs et les migrations ne sont pas démarrées automatiquement.
+
+Pour démarrer les APIs avec les frontends, après avoir préparé PostgreSQL Core et
+son fichier `eglise-core/Backend/.runtime/database.env` :
+
+```powershell
+powershell -ExecutionPolicy Bypass -File Launcher/Web/launch-app.ps1 -StartApis -RequireCore -NoBrowser
+```
 
 Tests du contrôle : `powershell -ExecutionPolicy Bypass -File Launcher/Web/test-core-readiness.ps1`.
 
