@@ -19,7 +19,7 @@
         <span>Bible <strong>Open</strong></span>
       </a>
       <div class="header-actions">
-        <a class="header-link" href="http://127.0.0.1:5185/" aria-label="Compte Bible Open et services transversaux">Église Core</a>
+        <a class="header-link" href="#" data-app-link="core" aria-label="Compte Bible Open et services transversaux">Église Core</a>
         <a class="header-link" href="#applications"><span data-i18n="navApps">Nos applications</span> <span aria-hidden="true">↓</span></a>
         <label class="language-picker" aria-label="Choisir la langue" data-i18n-aria="languageLabel">
           <span class="language-icon" aria-hidden="true">🌐</span>
@@ -52,9 +52,9 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow"><span></span> <span data-i18n="ecosystem">L'écosystème Bible Open</span></p>
-            <h2 id="apps-title" data-i18n-html="appsTitle">Un même élan,<br />sept façons d’avancer.</h2>
+            <h2 id="apps-title" data-i18n-html="appsTitle">Un même élan,<br />huit façons d’avancer.</h2>
           </div>
-          <p data-i18n="appsIntro">Choisissez votre chemin : apprendre, étudier, servir et faire grandir la vie de l’Église.</p>
+          <p data-i18n="appsIntro">Choisissez votre chemin : apprendre, étudier, servir, gérer, communiquer et célébrer ensemble.</p>
         </div>
 
         <div class="app-grid">
@@ -92,72 +92,86 @@
             </div>
           </article>
 
-          <article class="app-card module-card community-card">
-            <div class="card-topline"><span class="number">03</span><span class="status" data-i18n="available">Disponible</span></div>
+          <article class="app-card module-card community-card" data-app-card="community">
+            <div class="card-topline"><span class="number">03</span><span class="status" data-app-status="community" data-i18n="available">Disponible</span></div>
             <div class="card-visual module-visual" aria-hidden="true"><span>CE</span></div>
             <div class="card-content">
               <p class="card-kicker" data-i18n="communityKicker">Vivre ensemble</p>
               <h3 data-i18n-html="communityTitle">Communauté<br />Église</h3>
               <p data-i18n="communityDescription">Un espace pour les membres, les groupes et les liens qui font vivre la communauté.</p>
               <div class="card-actions">
-                <a class="card-action" href="http://localhost:5180/"><span data-i18n="openCommunity">Accéder à Communauté Église</span> <span class="card-arrow" aria-hidden="true">→</span></a>
-                <a class="external-action" href="http://localhost:5180/" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
+                <a class="card-action" href="#" data-app-link="community"><span data-i18n="openCommunity">Accéder à Communauté Église</span> <span class="card-arrow" aria-hidden="true">→</span></a>
+                <a class="external-action" href="#" data-app-link="community" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
 
-          <article class="app-card module-card core-card">
-            <div class="card-topline"><span class="number">04</span><span class="status" data-i18n="available">Disponible</span></div>
+          <article class="app-card module-card core-card" data-app-card="core">
+            <div class="card-topline"><span class="number">04</span><span class="status" data-app-status="core" data-i18n="available">Disponible</span></div>
             <div class="card-visual module-visual" aria-hidden="true"><span>EC</span></div>
             <div class="card-content">
               <p class="card-kicker" data-i18n="coreKicker">Piloter l’Église</p>
               <h3 data-i18n-html="coreTitle">Église<br />Core</h3>
               <p data-i18n="coreDescription">Le portail central pour coordonner les espaces, les équipes et les services de l’Église.</p>
               <div class="card-actions">
-                <a class="card-action" href="http://localhost:5181/"><span data-i18n="openCore">Accéder à Église Core</span> <span class="card-arrow" aria-hidden="true">→</span></a>
-                <a class="external-action" href="http://localhost:5181/" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
+                <a class="card-action" href="#" data-app-link="core"><span data-i18n="openCore">Accéder à Église Core</span> <span class="card-arrow" aria-hidden="true">→</span></a>
+                <a class="external-action" href="#" data-app-link="core" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
 
-          <article class="app-card module-card communication-card">
-            <div class="card-topline"><span class="number">05</span><span class="status" data-i18n="available">Disponible</span></div>
+          <article class="app-card module-card communication-card" data-app-card="communication">
+            <div class="card-topline"><span class="number">05</span><span class="status" data-app-status="communication" data-i18n="available">Disponible</span></div>
             <div class="card-visual module-visual" aria-hidden="true"><span>CO</span></div>
             <div class="card-content">
               <p class="card-kicker" data-i18n="communicationKicker">Partager l’essentiel</p>
               <h3 data-i18n-html="communicationTitle">Communication<br />Église</h3>
               <p data-i18n="communicationDescription">Les outils pour informer, publier et garder la communauté connectée au quotidien.</p>
               <div class="card-actions">
-                <a class="card-action" href="http://localhost:5182/"><span data-i18n="openCommunication">Accéder à Communication Église</span> <span class="card-arrow" aria-hidden="true">→</span></a>
-                <a class="external-action" href="http://localhost:5182/" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
+                <a class="card-action" href="#" data-app-link="communication"><span data-i18n="openCommunication">Accéder à Communication Église</span> <span class="card-arrow" aria-hidden="true">→</span></a>
+                <a class="external-action" href="#" data-app-link="communication" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
 
-          <article class="app-card module-card stewardship-card">
-            <div class="card-topline"><span class="number">06</span><span class="status" data-i18n="available">Disponible</span></div>
+          <article class="app-card module-card stewardship-card" data-app-card="stewardship">
+            <div class="card-topline"><span class="number">06</span><span class="status" data-app-status="stewardship" data-i18n="available">Disponible</span></div>
             <div class="card-visual module-visual" aria-hidden="true"><span>IE</span></div>
             <div class="card-content">
               <p class="card-kicker" data-i18n="stewardshipKicker">Gérer avec soin</p>
               <h3 data-i18n-html="stewardshipTitle">Intendance<br />Église</h3>
               <p data-i18n="stewardshipDescription">Un espace clair pour suivre les ressources et soutenir la mission de l’Église.</p>
               <div class="card-actions">
-                <a class="card-action" href="http://localhost:5190/"><span data-i18n="openStewardship">Accéder à Intendance Église</span> <span class="card-arrow" aria-hidden="true">→</span></a>
-                <a class="external-action" href="http://localhost:5190/" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
+                <a class="card-action" href="#" data-app-link="stewardship"><span data-i18n="openStewardship">Accéder à Intendance Église</span> <span class="card-arrow" aria-hidden="true">→</span></a>
+                <a class="external-action" href="#" data-app-link="stewardship" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
 
-          <article class="app-card module-card pastoral-card">
-            <div class="card-topline"><span class="number">07</span><span class="status" data-i18n="available">Disponible</span></div>
+          <article class="app-card module-card pastoral-card" data-app-card="pastoral">
+            <div class="card-topline"><span class="number">07</span><span class="status" data-app-status="pastoral" data-i18n="available">Disponible</span></div>
             <div class="card-visual module-visual" aria-hidden="true"><span>VP</span></div>
             <div class="card-content">
               <p class="card-kicker" data-i18n="pastoralKicker">Accompagner les personnes</p>
               <h3 data-i18n-html="pastoralTitle">Vie<br />pastorale</h3>
               <p data-i18n="pastoralDescription">Des outils pour accompagner les parcours, les rendez-vous et la vie pastorale.</p>
               <div class="card-actions">
-                <a class="card-action" href="http://localhost:5183/"><span data-i18n="openPastoral">Accéder à Vie pastorale</span> <span class="card-arrow" aria-hidden="true">→</span></a>
-                <a class="external-action" href="http://localhost:5183/" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
+                <a class="card-action" href="#" data-app-link="pastoral"><span data-i18n="openPastoral">Accéder à Vie pastorale</span> <span class="card-arrow" aria-hidden="true">→</span></a>
+                <a class="external-action" href="#" data-app-link="pastoral" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="app-card module-card worship-card" data-app-card="worship">
+            <div class="card-topline"><span class="number">08</span><span class="status" data-app-status="worship" data-i18n="available">Disponible</span></div>
+            <div class="card-visual module-visual" aria-hidden="true"><span>LE</span></div>
+            <div class="card-content">
+              <p class="card-kicker" data-i18n="worshipKicker">Chanter &amp; servir</p>
+              <h3 data-i18n-html="worshipTitle">Louange<br />Église</h3>
+              <p data-i18n="worshipDescription">Un espace pour les chants, les paroles, les instrumentales, les équipes et la formation à la louange.</p>
+              <div class="card-actions">
+                <a class="card-action" href="#" data-app-link="worship"><span data-i18n="openWorship">Accéder à Louange Église</span> <span class="card-arrow" aria-hidden="true">→</span></a>
+                <a class="external-action" href="#" data-app-link="worship" target="_blank" rel="noopener noreferrer"><span data-i18n="external">Ouvrir dans un navigateur externe</span> <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </article>
