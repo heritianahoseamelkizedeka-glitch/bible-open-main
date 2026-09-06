@@ -1,3 +1,9 @@
+import {
+  isLocalHostname,
+  resolveApplicationUrl,
+  validateApplicationRegistry,
+} from './lib/app-registry.js';
+
 document.querySelector('#year').textContent = new Date().getFullYear();
 
 const translations = {
@@ -15,7 +21,9 @@ const translations = {
 const supportedLanguages = Object.keys(translations);
 const detectedLanguage = (navigator.languages?.[0] || navigator.language || 'fr').toLowerCase().split('-')[0];
 const savedLanguage = localStorage.getItem('bible-open-language');
-const activeLanguage = supportedLanguages.includes(savedLanguage) ? savedLanguage : (supportedLanguages.includes(detectedLanguage) ? detectedLanguage : 'fr');
+const activeLanguage = supportedLanguages.includes(savedLanguage)
+  ? savedLanguage
+  : (supportedLanguages.includes(detectedLanguage) ? detectedLanguage : 'fr');
 const copy = translations[activeLanguage];
 
 document.documentElement.lang = activeLanguage;
@@ -33,8 +41,7 @@ languageSelect.addEventListener('change', (event) => {
   window.location.reload();
 });
 
-const localHosts = new Set(['localhost', '127.0.0.1', '::1']);
-const isLocalEnvironment = localHosts.has(window.location.hostname);
+const isLocalEnvironment = isLocalHostname(window.location.hostname);
 
 function disableApplication(appId) {
   document.querySelectorAll(`[data-app-link="${appId}"]`).forEach((link) => {
@@ -43,28 +50,34 @@ function disableApplication(appId) {
     link.setAttribute('tabindex', '-1');
   });
 
+  const card = document.querySelector(`[data-app-card="${appId}"]`);
+  if (card) card.dataset.appAvailable = 'false';
+
   const status = document.querySelector(`[data-app-status="${appId}"]`);
   if (status) status.textContent = copy.unavailableOnline;
 }
 
+function enableApplication(appId, targetUrl) {
+  document.querySelectorAll(`[data-app-link="${appId}"]`).forEach((link) => {
+    link.href = targetUrl;
+    link.removeAttribute('aria-disabled');
+    link.removeAttribute('tabindex');
+  });
+
+  const card = document.querySelector(`[data-app-card="${appId}"]`);
+  if (card) card.dataset.appAvailable = 'true';
+}
+
 async function configureApplicationLinks() {
   try {
-    const response = await fetch('/config/applications.json', { cache: 'no-store' });
+    const response = await fetch('./config/applications.json', { cache: 'no-store' });
     if (!response.ok) throw new Error(`Application registry unavailable (${response.status})`);
 
-    const registry = await response.json();
+    const registry = validateApplicationRegistry(await response.json());
     ['quiz', 'study'].forEach((appId) => {
-      const app = registry.applications?.[appId];
-      const targetUrl = isLocalEnvironment ? app?.localUrl : app?.productionUrl;
-
-      if (!targetUrl) {
-        disableApplication(appId);
-        return;
-      }
-
-      document.querySelectorAll(`[data-app-link="${appId}"]`).forEach((link) => {
-        link.href = targetUrl;
-      });
+      const targetUrl = resolveApplicationUrl(registry.applications[appId], { local: isLocalEnvironment });
+      if (targetUrl) enableApplication(appId, targetUrl);
+      else disableApplication(appId);
     });
   } catch (error) {
     console.error('Bible Open application registry error:', error);
@@ -74,13 +87,24 @@ async function configureApplicationLinks() {
 
 configureApplicationLinks();
 
+const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+const supportsIntersectionObserver = 'IntersectionObserver' in window;
 const cards = document.querySelectorAll('.app-card');
-const reveal = new IntersectionObserver(
-  (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add('is-visible')),
-  { threshold: 0.18 },
-);
 
-cards.forEach((card) => reveal.observe(card));
+if (prefersReducedMotion || !supportsIntersectionObserver) {
+  cards.forEach((card) => card.classList.add('is-visible'));
+} else {
+  const reveal = new IntersectionObserver(
+    (entries) => entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        reveal.unobserve(entry.target);
+      }
+    }),
+    { threshold: 0.18 },
+  );
+  cards.forEach((card) => reveal.observe(card));
+}
 
 const animatedTextBlocks = document.querySelectorAll([
   '.hero-copy h1',
@@ -123,16 +147,20 @@ function wrapWords(element) {
   });
 }
 
-animatedTextBlocks.forEach(wrapWords);
+if (prefersReducedMotion || !supportsIntersectionObserver) {
+  animatedTextBlocks.forEach((block) => block.classList.add('text-is-visible'));
+} else {
+  animatedTextBlocks.forEach(wrapWords);
 
-const textReveal = new IntersectionObserver(
-  (entries) => entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('text-is-visible');
-      textReveal.unobserve(entry.target);
-    }
-  }),
-  { threshold: 0.28, rootMargin: '0px 0px -5% 0px' },
-);
+  const textReveal = new IntersectionObserver(
+    (entries) => entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('text-is-visible');
+        textReveal.unobserve(entry.target);
+      }
+    }),
+    { threshold: 0.28, rootMargin: '0px 0px -5% 0px' },
+  );
 
-animatedTextBlocks.forEach((block) => textReveal.observe(block));
+  animatedTextBlocks.forEach((block) => textReveal.observe(block));
+}
