@@ -1,3 +1,9 @@
+import {
+  getApplicationIds,
+  resolveApplicationUrl,
+  validateApplicationRegistry,
+} from './application-registry.js';
+
 document.querySelector('#year').textContent = new Date().getFullYear();
 
 const translations = {
@@ -15,8 +21,8 @@ const translations = {
     verse: 'Ta parole est une lampe à mes pieds, et une lumière sur mon sentier.',
     verseRef: 'Psaume 119:105',
     ecosystem: "L'écosystème Bible Open",
-    appsTitle: 'Un même élan,<br />sept façons d’avancer.',
-    appsIntro: 'Choisissez votre chemin : apprendre, étudier, servir et faire grandir la vie de l’Église.',
+    appsTitle: 'Un même élan,<br />huit façons d’avancer.',
+    appsIntro: 'Choisissez votre chemin : apprendre, étudier, servir, gérer, communiquer et célébrer ensemble.',
     available: 'Disponible',
     unavailableOnline: 'Bientôt en ligne',
     quizKicker: 'Apprendre & jouer',
@@ -46,6 +52,10 @@ const translations = {
     pastoralTitle: 'Vie<br />pastorale',
     pastoralDescription: 'Des outils pour accompagner les parcours, les rendez-vous et la vie pastorale.',
     openPastoral: 'Accéder à Vie pastorale',
+    worshipKicker: 'Chanter & servir',
+    worshipTitle: 'Louange<br />Église',
+    worshipDescription: 'Un espace pour les chants, les paroles, les instrumentales, les équipes et la formation à la louange.',
+    openWorship: 'Accéder à Louange Église',
     footerTagline: 'Des outils numériques au service de la Parole.',
   },
   en: {
@@ -62,8 +72,8 @@ const translations = {
     verse: 'Your word is a lamp to my feet and a light to my path.',
     verseRef: 'Psalm 119:105',
     ecosystem: 'The Bible Open ecosystem',
-    appsTitle: 'One shared purpose,<br />seven ways forward.',
-    appsIntro: 'Choose your path: learn, study, serve and help church life grow.',
+    appsTitle: 'One shared purpose,<br />eight ways forward.',
+    appsIntro: 'Choose your path: learn, study, serve, manage, communicate and worship together.',
     available: 'Available',
     unavailableOnline: 'Coming online',
     quizKicker: 'Learn & play',
@@ -93,6 +103,10 @@ const translations = {
     pastoralTitle: 'Pastoral<br />Life',
     pastoralDescription: 'Tools to support journeys, appointments and pastoral life.',
     openPastoral: 'Open Pastoral Life',
+    worshipKicker: 'Sing & serve',
+    worshipTitle: 'Church<br />Worship',
+    worshipDescription: 'A space for songs, lyrics, backing tracks, worship teams and training.',
+    openWorship: 'Open Church Worship',
     footerTagline: 'Digital tools serving the Word.',
   },
   mg: {
@@ -109,8 +123,8 @@ const translations = {
     verse: 'Fanilon’ny tongotro sy fanazavana ny lalako ny teninao.',
     verseRef: 'Salamo 119:105',
     ecosystem: 'Ny tontolon’ny Bible Open',
-    appsTitle: 'Tanjona iray,<br />lalana fito handrosoana.',
-    appsIntro: 'Safidio ny lalanao: mianara, mandalina, manompo ary mampandroso ny fiainan’ny fiangonana.',
+    appsTitle: 'Tanjona iray,<br />lalana valo handrosoana.',
+    appsIntro: 'Safidio ny lalanao: mianara, mandalina, manompo, mitantana, mifandray ary miara-midera.',
     available: 'Azo ampiasaina',
     unavailableOnline: 'Ho avy an-tserasera',
     quizKicker: 'Mianatra & milalao',
@@ -140,6 +154,10 @@ const translations = {
     pastoralTitle: 'Fiainana<br />pastoraly',
     pastoralDescription: 'Fitaovana hanohanana ny lalana, fotoana ary fiainana pastoraly.',
     openPastoral: 'Sokafy ny Fiainana pastoraly',
+    worshipKicker: 'Mihira & manompo',
+    worshipTitle: 'Fiderana<br />Fiangonana',
+    worshipDescription: 'Toerana ho an’ny hira, tononkira, feonkira, ekipan’ny fiderana ary fiofanana.',
+    openWorship: 'Sokafy ny Fiderana Fiangonana',
     footerTagline: 'Fitaovana nomerika ho fanompoana ny Tenin’Andriamanitra.',
   },
 };
@@ -167,8 +185,11 @@ languageSelect.addEventListener('change', (event) => {
   window.location.reload();
 });
 
-const localHosts = new Set(['localhost', '127.0.0.1', '::1']);
-const isLocalEnvironment = localHosts.has(window.location.hostname);
+const linkedApplicationIds = [...new Set(
+  [...document.querySelectorAll('[data-app-link]')]
+    .map((link) => link.dataset.appLink)
+    .filter(Boolean),
+)];
 
 function disableApplication(appId) {
   document.querySelectorAll(`[data-app-link="${appId}"]`).forEach((link) => {
@@ -187,10 +208,20 @@ async function configureApplicationLinks() {
     if (!response.ok) throw new Error(`Application registry unavailable (${response.status})`);
 
     const registry = await response.json();
-    ['quiz', 'study'].forEach((appId) => {
-      const app = registry.applications?.[appId];
-      const targetUrl = isLocalEnvironment ? app?.localUrl : app?.productionUrl;
+    const validation = validateApplicationRegistry(registry);
+    if (!validation.valid) {
+      throw new Error(`Invalid application registry: ${validation.errors.join(' | ')}`);
+    }
 
+    const registeredApplicationIds = new Set(getApplicationIds(registry));
+
+    linkedApplicationIds.forEach((appId) => {
+      if (!registeredApplicationIds.has(appId)) {
+        disableApplication(appId);
+        return;
+      }
+
+      const targetUrl = resolveApplicationUrl(registry.applications[appId], window.location.hostname);
       if (!targetUrl) {
         disableApplication(appId);
         return;
@@ -198,24 +229,19 @@ async function configureApplicationLinks() {
 
       document.querySelectorAll(`[data-app-link="${appId}"]`).forEach((link) => {
         link.href = targetUrl;
+        link.removeAttribute('aria-disabled');
+        link.removeAttribute('tabindex');
       });
     });
   } catch (error) {
     console.error('Bible Open application registry error:', error);
-    ['quiz', 'study'].forEach(disableApplication);
+    linkedApplicationIds.forEach(disableApplication);
   }
 }
 
 configureApplicationLinks();
 
 const cards = document.querySelectorAll('.app-card');
-const reveal = new IntersectionObserver(
-  (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add('is-visible')),
-  { threshold: 0.18 },
-);
-
-cards.forEach((card) => reveal.observe(card));
-
 const animatedTextBlocks = document.querySelectorAll([
   '.hero-copy h1',
   '.hero-copy .intro',
@@ -227,46 +253,58 @@ const animatedTextBlocks = document.querySelectorAll([
   '.card-content > p:not(.card-kicker)',
 ].join(','));
 
-function wrapWords(element) {
-  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
-  const textNodes = [];
+const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
-  while (walker.nextNode()) textNodes.push(walker.currentNode);
+if (reduceMotion || typeof IntersectionObserver === 'undefined') {
+  cards.forEach((card) => card.classList.add('is-visible'));
+  animatedTextBlocks.forEach((block) => block.classList.add('text-is-visible'));
+} else {
+  const reveal = new IntersectionObserver(
+    (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add('is-visible')),
+    { threshold: 0.18 },
+  );
+  cards.forEach((card) => reveal.observe(card));
 
-  let wordIndex = 0;
-  textNodes.forEach((node) => {
-    if (!node.textContent?.trim()) return;
+  function wrapWords(element) {
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
 
-    const fragment = document.createDocumentFragment();
-    node.textContent.split(/(\s+)/).forEach((part) => {
-      if (!part) return;
-      if (/^\s+$/.test(part)) {
-        fragment.append(part);
-        return;
-      }
+    let wordIndex = 0;
+    textNodes.forEach((node) => {
+      if (!node.textContent?.trim()) return;
 
-      const word = document.createElement('span');
-      word.className = 'word-reveal';
-      word.style.setProperty('--word-delay', `${Math.min(wordIndex * 55, 880)}ms`);
-      word.textContent = part;
-      fragment.append(word);
-      wordIndex += 1;
+      const fragment = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach((part) => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) {
+          fragment.append(part);
+          return;
+        }
+
+        const word = document.createElement('span');
+        word.className = 'word-reveal';
+        word.style.setProperty('--word-delay', `${Math.min(wordIndex * 55, 880)}ms`);
+        word.textContent = part;
+        fragment.append(word);
+        wordIndex += 1;
+      });
+
+      node.replaceWith(fragment);
     });
+  }
 
-    node.replaceWith(fragment);
-  });
+  animatedTextBlocks.forEach(wrapWords);
+
+  const textReveal = new IntersectionObserver(
+    (entries) => entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('text-is-visible');
+        textReveal.unobserve(entry.target);
+      }
+    }),
+    { threshold: 0.28, rootMargin: '0px 0px -5% 0px' },
+  );
+
+  animatedTextBlocks.forEach((block) => textReveal.observe(block));
 }
-
-animatedTextBlocks.forEach(wrapWords);
-
-const textReveal = new IntersectionObserver(
-  (entries) => entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('text-is-visible');
-      textReveal.unobserve(entry.target);
-    }
-  }),
-  { threshold: 0.28, rootMargin: '0px 0px -5% 0px' },
-);
-
-animatedTextBlocks.forEach((block) => textReveal.observe(block));
