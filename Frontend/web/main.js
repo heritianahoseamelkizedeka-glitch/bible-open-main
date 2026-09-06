@@ -2,6 +2,7 @@ document.querySelector('#year').textContent = new Date().getFullYear();
 
 const translations = {
   fr: {
+<<<<<<< HEAD
     title: 'Bible Open — La Bible, ouverte à tous', description: 'Bible Open rassemble des outils simples pour découvrir, comprendre et vivre la Bible.', brandLabel: 'Bible Open, accueil', bibleAlt: 'Bible réelle ouverte', languageLabel: 'Choisir la langue', navApps: 'Nos applications', heroEyebrow: 'Une bibliothèque qui grandit avec vous', heroTitle: 'La Bible,<br /><em>ouverte à tous.</em>', heroIntro: 'Explorez les Écritures, approfondissez votre foi et testez vos connaissances grâce à des outils accessibles, pensés pour chaque jour.', discover: 'Découvrir les applications', verse: 'Ta parole est une lampe à mes pieds, et une lumière sur mon sentier.', verseRef: 'Psaume 119:105', ecosystem: "L'écosystème Bible Open", appsTitle: 'Un même élan,<br />sept façons d’avancer.', appsIntro: 'Choisissez votre chemin : apprendre, étudier, servir et faire grandir la vie de l’Église.', available: 'Disponible', quizKicker: 'Apprendre & jouer', quizDescription: 'Des questions pour découvrir la Bible autrement, progresser et partager un moment stimulant.', openQuiz: 'Accéder au Quizz', external: 'Ouvrir dans un navigateur externe', studyKicker: 'Lire & approfondir', studyDescription: 'Un espace complet pour lire, annoter, étudier les textes et nourrir une réflexion personnelle.', openStudy: 'Accéder à Study Bible', communityKicker: 'Vivre ensemble', communityTitle: 'Communauté<br />Église', communityDescription: 'Un espace pour les membres, les groupes et les liens qui font vivre la communauté.', openCommunity: 'Accéder à Communauté Église', coreKicker: 'Piloter l’Église', coreTitle: 'Église<br />Core', coreDescription: 'Le portail central pour coordonner les espaces, les équipes et les services de l’Église.', openCore: 'Accéder à Église Core', communicationKicker: 'Partager l’essentiel', communicationTitle: 'Communication<br />Église', communicationDescription: 'Les outils pour informer, publier et garder la communauté connectée au quotidien.', openCommunication: 'Accéder à Communication Église', stewardshipKicker: 'Gérer avec soin', stewardshipTitle: 'Intendance<br />Église', stewardshipDescription: 'Un espace clair pour suivre les ressources et soutenir la mission de l’Église.', openStewardship: 'Accéder à Intendance Église', pastoralKicker: 'Accompagner les personnes', pastoralTitle: 'Vie<br />pastorale', pastoralDescription: 'Des outils pour accompagner les parcours, les rendez-vous et la vie pastorale.', openPastoral: 'Accéder à Vie pastorale', footerTagline: 'Des outils numériques au service de la Parole.',
   },
   en: {
@@ -9,6 +10,15 @@ const translations = {
   },
   mg: {
     title: 'Bible Open — Baiboly misokatra ho an’ny rehetra', description: 'Bible Open dia manangona fitaovana tsotra hahitana, hahatakarana ary hiainana ny Baiboly.', brandLabel: 'Bible Open, fandraisana', bibleAlt: 'Baiboly tena izy misokatra', languageLabel: 'Safidio ny fiteny', navApps: 'Ny rindranasanay', heroEyebrow: 'Tranomboky mitombo miaraka aminao', heroTitle: 'Ny Baiboly,<br /><em>misokatra ho an’ny rehetra.</em>', heroIntro: 'Diniho ny Soratra Masina, halalino ny finoanao ary zahao ny fahalalanao amin’ny fitaovana mora ampiasaina isan’andro.', discover: 'Jereo ireo rindranasa', verse: 'Fanilon’ny tongotro sy fanazavana ny lalako ny teninao.', verseRef: 'Salamo 119:105', ecosystem: 'Ny tontolon’ny Bible Open', appsTitle: 'Tanjona iray,<br />lalana fito handrosoana.', appsIntro: 'Safidio ny lalanao: mianara, mandalina, manompo ary mampandroso ny fiainan’ny fiangonana.', available: 'Azo ampiasaina', quizKicker: 'Mianatra & milalao', quizDescription: 'Fanontaniana hahitana ny Baiboly amin’ny fomba hafa, handrosoana ary hizarana fotoana mahaliana.', openQuiz: 'Sokafy ny Quizz', external: 'Sokafy amin’ny navigateur ivelany', studyKicker: 'Mamaky & mandalina', studyDescription: 'Toerana feno hamakiana, hanamarihana ary handalinana ny Soratra Masina.', openStudy: 'Sokafy ny Study Bible', communityKicker: 'Miara-miaina', communityTitle: 'Fiangonana<br />miara-monina', communityDescription: 'Toerana ho an’ny mpikambana, vondrona ary fifandraisana mampivelona ny fiangonana.', openCommunity: 'Sokafy ny Fiangonana miara-monina', coreKicker: 'Mitantana ny fiangonana', coreTitle: 'Fiangonana<br />Core', coreDescription: 'Vavahady ivon’ny fandrindrana ny sehatra, ekipa ary tolotra ao amin’ny fiangonana.', openCore: 'Sokafy ny Fiangonana Core', communicationKicker: 'Mizara ny zava-dehibe', communicationTitle: 'Serasera<br />Fiangonana', communicationDescription: 'Fitaovana hampahafantarana sy hitazonana ny fiangonana hifandray isan’andro.', openCommunication: 'Sokafy ny Serasera Fiangonana', stewardshipKicker: 'Mitantana amim-pitandremana', stewardshipTitle: 'Fitantanana<br />Fiangonana', stewardshipDescription: 'Toerana mazava hanarahana ny loharanon-karena sy hanohanana ny iraka.', openStewardship: 'Sokafy ny Fitantanana Fiangonana', pastoralKicker: 'Mikarakara olona', pastoralTitle: 'Fiainana<br />pastoraly', pastoralDescription: 'Fitaovana hanohanana ny lalana, fotoana ary fiainana pastoraly.', openPastoral: 'Sokafy ny Fiainana pastoraly', footerTagline: 'Fitaovana nomerika ho fanompoana ny Tenin’Andriamanitra.',
+=======
+    title: 'Bible Open — La Bible, ouverte à tous', description: 'Bible Open rassemble des outils simples pour découvrir, comprendre et vivre la Bible.', brandLabel: 'Bible Open, accueil', bibleAlt: 'Bible réelle ouverte', languageLabel: 'Choisir la langue', navApps: 'Nos applications', heroEyebrow: 'Une bibliothèque qui grandit avec vous', heroTitle: 'La Bible,<br /><em>ouverte à tous.</em>', heroIntro: 'Explorez les Écritures, approfondissez votre foi et testez vos connaissances grâce à des outils accessibles, pensés pour chaque jour.', discover: 'Découvrir les applications', verse: 'Ta parole est une lampe à mes pieds, et une lumière sur mon sentier.', verseRef: 'Psaume 119:105', ecosystem: "L'écosystème Bible Open", appsTitle: 'Un même élan,<br />deux façons d’avancer.', appsIntro: 'Choisissez votre chemin : apprendre en jouant ou prendre le temps d’étudier.', available: 'Disponible', unavailableOnline: 'Bientôt en ligne', quizKicker: 'Apprendre & jouer', quizDescription: 'Des questions pour découvrir la Bible autrement, progresser et partager un moment stimulant.', openQuiz: 'Accéder au Quizz', external: 'Ouvrir dans un navigateur externe', studyKicker: 'Lire & approfondir', studyDescription: 'Un espace complet pour lire, annoter et étudier les textes tout en nourrissant une réflexion personnelle.', openStudy: 'Accéder à Study Bible', footerTagline: 'Des outils numériques au service de la Parole.',
+  },
+  en: {
+    title: 'Bible Open — The Bible, open to everyone', description: 'Bible Open brings together simple tools to discover, understand and live the Bible.', brandLabel: 'Bible Open, home', bibleAlt: 'Real open Bible', languageLabel: 'Choose language', navApps: 'Our applications', heroEyebrow: 'A library that grows with you', heroTitle: 'The Bible,<br /><em>open to everyone.</em>', heroIntro: 'Explore Scripture, deepen your faith and test your knowledge with accessible tools designed for everyday use.', discover: 'Discover the applications', verse: 'Your word is a lamp to my feet and a light to my path.', verseRef: 'Psalm 119:105', ecosystem: 'The Bible Open ecosystem', appsTitle: 'One shared purpose,<br />two ways forward.', appsIntro: 'Choose your path: learn through play or take time for deeper study.', available: 'Available', unavailableOnline: 'Coming online', quizKicker: 'Learn & play', quizDescription: 'Questions to discover the Bible differently, make progress and share a stimulating moment.', openQuiz: 'Open Bible Quiz', external: 'Open in an external browser', studyKicker: 'Read & explore', studyDescription: 'A complete space to read, annotate and study texts while nurturing personal reflection.', openStudy: 'Open Study Bible', footerTagline: 'Digital tools serving the Word.',
+  },
+  mg: {
+    title: 'Bible Open — Baiboly misokatra ho an’ny rehetra', description: 'Bible Open dia manangona fitaovana tsotra hahitana, hahatakarana ary hiainana ny Baiboly.', brandLabel: 'Bible Open, fandraisana', bibleAlt: 'Baiboly tena izy misokatra', languageLabel: 'Safidio ny fiteny', navApps: 'Ny rindranasanay', heroEyebrow: 'Tranomboky mitombo miaraka aminao', heroTitle: 'Ny Baiboly,<br /><em>misokatra ho an’ny rehetra.</em>', heroIntro: 'Diniho ny Soratra Masina, halalino ny finoanao ary zahao ny fahalalanao amin’ny fitaovana mora ampiasaina isan’andro.', discover: 'Jereo ireo rindranasa', verse: 'Fanilon’ny tongotro sy fanazavana ny lalako ny teninao.', verseRef: 'Salamo 119:105', ecosystem: 'Ny tontolon’ny Bible Open', appsTitle: 'Tanjona iray,<br />lalana roa handrosoana.', appsIntro: 'Safidio ny lalanao: mianara amin’ny lalao na manokàna fotoana handalinana.', available: 'Azo ampiasaina', unavailableOnline: 'Ho avy an-tserasera', quizKicker: 'Mianatra & milalao', quizDescription: 'Fanontaniana hahitana ny Baiboly amin’ny fomba hafa, handrosoana ary hizarana fotoana mahaliana.', openQuiz: 'Sokafy ny Quizz', external: 'Sokafy amin’ny navigateur ivelany', studyKicker: 'Mamaky & mandalina', studyDescription: 'Toerana feno hamakiana, hanamarihana ary handalinana ny Soratra Masina.', openStudy: 'Sokafy ny Study Bible', footerTagline: 'Fitaovana nomerika ho fanompoana ny Tenin’Andriamanitra.',
+>>>>>>> 9797314a6ac5e4f0575eca52f684a7c26e278d6a
   },
 };
 
@@ -32,6 +42,47 @@ languageSelect.addEventListener('change', (event) => {
   localStorage.setItem('bible-open-language', event.target.value);
   window.location.reload();
 });
+
+const localHosts = new Set(['localhost', '127.0.0.1', '::1']);
+const isLocalEnvironment = localHosts.has(window.location.hostname);
+
+function disableApplication(appId) {
+  document.querySelectorAll(`[data-app-link="${appId}"]`).forEach((link) => {
+    link.removeAttribute('href');
+    link.setAttribute('aria-disabled', 'true');
+    link.setAttribute('tabindex', '-1');
+  });
+
+  const status = document.querySelector(`[data-app-status="${appId}"]`);
+  if (status) status.textContent = copy.unavailableOnline;
+}
+
+async function configureApplicationLinks() {
+  try {
+    const response = await fetch('/config/applications.json', { cache: 'no-store' });
+    if (!response.ok) throw new Error(`Application registry unavailable (${response.status})`);
+
+    const registry = await response.json();
+    ['quiz', 'study'].forEach((appId) => {
+      const app = registry.applications?.[appId];
+      const targetUrl = isLocalEnvironment ? app?.localUrl : app?.productionUrl;
+
+      if (!targetUrl) {
+        disableApplication(appId);
+        return;
+      }
+
+      document.querySelectorAll(`[data-app-link="${appId}"]`).forEach((link) => {
+        link.href = targetUrl;
+      });
+    });
+  } catch (error) {
+    console.error('Bible Open application registry error:', error);
+    ['quiz', 'study'].forEach(disableApplication);
+  }
+}
+
+configureApplicationLinks();
 
 const cards = document.querySelectorAll('.app-card');
 const reveal = new IntersectionObserver(

@@ -15,9 +15,22 @@ if (-not (Test-Path -LiteralPath $stateFile)) {
 
 $servers = Get-Content -LiteralPath $stateFile -Raw | ConvertFrom-Json
 foreach ($server in $servers) {
-    if ($server.ProcessId) {
-        Stop-ProcessTree -ProcessId ([int]$server.ProcessId)
-        Write-Host "$($server.Name) arrete (PID $($server.ProcessId))."
+    if (-not $server.ProcessId) { continue }
+
+    $process = Get-Process -Id ([int]$server.ProcessId) -ErrorAction SilentlyContinue
+    if (-not $process) { continue }
+
+    if ($server.StartedAt) {
+        $recordedStart = [DateTimeOffset]::Parse([string]$server.StartedAt)
+        $actualStart = [DateTimeOffset]$process.StartTime
+        if ([Math]::Abs(($actualStart - $recordedStart).TotalSeconds) -gt 2) {
+            Write-Warning "PID $($server.ProcessId) reutilise par un autre processus ; arret ignore pour $($server.Name)."
+            continue
+        }
     }
+
+    Stop-ProcessTree -ProcessId ([int]$server.ProcessId)
+    Write-Host "$($server.Name) arrete (PID $($server.ProcessId))."
 }
+
 Remove-Item -LiteralPath $stateFile -ErrorAction SilentlyContinue
