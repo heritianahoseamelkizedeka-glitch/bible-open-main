@@ -1,0 +1,13 @@
+{
+  "id": "quiz-biblique",
+  "name": "Bible Open Quiz",
+  "version": "1.0.0",
+  "type": "external-module",
+  "enabled": true,
+  "route": "/quiz",
+  "permissions": [
+    "quiz.play",
+    "quiz.score",
+    "quiz.ranking"
+  ]
+}
